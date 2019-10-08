@@ -29,6 +29,7 @@ COPY --from=build /volume/${PROJECT}/mercator_service/static /bin/static
 
 ARG BUILD_DATE
 ARG VCS_REF
+ARG VERSION
 LABEL org.label-schema.build-date=$BUILD_DATE \
     org.label-schema.name="kg-spatial-search" \
     org.label-schema.description="Docker image for running the KnowledgeGraph Spatial Search service" \
@@ -37,6 +38,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
     org.label-schema.vcs-ref=$VCS_REF \
     org.label-schema.vcs-url="https://github.com/HumanBrainProject/mercator" \
     org.label-schema.vendor="DIAS EPFL" \
+    org.label-schema.version=$VERSION \
     org.label-schema.docker.dockerfile="Dockerfile" \
     org.label-schema.schema-version="1.0"
 

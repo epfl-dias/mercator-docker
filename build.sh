@@ -27,5 +27,6 @@
 
 docker build -t kg-spatial-search \
        --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-       --build-arg VCS_REF=`git -C mercator/mercator_service rev-parse --short HEAD` \
+       --build-arg VCS_REF=`git -C mercator rev-parse --short HEAD` \
+       --build-arg VERSION=`git -C mercator tag --points-at HEAD` \
        .
