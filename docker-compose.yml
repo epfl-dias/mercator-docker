@@ -21,7 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-version: '3'
+version: '2.4'
 
 services:
 
@@ -38,13 +38,14 @@ services:
       - ${KG_SPATIAL_SEARCH_DATA}:/data/:rw
     ports:
       - "${KG_SPATIAL_SEARCH_PORT}:${KG_SPATIAL_SEARCH_PORT}"
-    deploy:                     # Used only by docker stack
-      restart_policy:
-        condition: any
-        delay: 5s
-        max_attempts: 3
-        window: 120s
+#    deploy:                     # Used only by docker stack
+#      restart_policy:
+#        condition: any
+#        delay: 5s
+#        max_attempts: 3
+#        window: 120s
     # Used only by docker-compose
     restart: unless-stopped
-    #mem_limit: 1073741824       # Max 1GB
-    #memswap_limit: 1073741824   # Disable SWAP (this is the ammount of memory + swap allowed)
+    mem_limit: ${KG_SPATIAL_SEARCH_MAX_MEM}       # Max memory allowed to be used.
+    memswap_limit: ${KG_SPATIAL_SEARCH_MAX_MEM}   # Disable SWAP (this is the ammount of memory + swap allowed)
+    mem_swappiness: 0                             # Disable SWAP
