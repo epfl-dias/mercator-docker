@@ -1,31 +1,32 @@
-# Instructions adapted from:
-#  https://alexbrand.dev/post/how-to-package-rust-applications-into-minimal-docker-containers/
+################################################################################
 #
+#                    Copyright (c) 2020-2020
+#   Data Intensive Applications and Systems Labaratory (DIAS)
+#            Ecole Polytechnique Federale de Lausanne
+#
+#                      All Rights Reserved.
+#
+# Permission to use, copy, modify and distribute this software and its
+# documentation is hereby granted, provided that both the copyright notice
+# and this permission notice appear in all copies of the software, derivative
+# works or modified versions, and any portions thereof, and that both notices
+# appear in supporting documentation.
+#
+# This code is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. THE AUTHORS AND ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE
+# DISCLAIM ANY LIABILITY OF ANY KIND FOR ANY DAMAGES WHATSOEVER RESULTING FROM 
+# THE USE OF THIS SOFTWARE.
+#
+################################################################################
+FROM scratch
 
-FROM clux/muslrust:stable AS build
+MAINTAINER Lionel Sambuc <lionel.sambuc@epfl.ch>
 
-ARG PROJECT=mercator
+ENV LANG=C.UTF-8
 
-# Retrieve sources
-COPY ${PROJECT} /volume/${PROJECT}
-
-# Build the service
-WORKDIR /volume/${PROJECT}
-RUN cargo build --release
-
-# Copy the statically-linked binary into a scratch container.
-FROM alpine:latest
-
-# Environment variables are resetted by the FROM clause.
-ARG PROJECT=mercator
-ARG BIN=mercator_service
-ENV BIN=${BIN}
-
-# The day we need openssl
-# RUN apk --no-cache add ca-certificates
-
-COPY --from=build /volume/${PROJECT}/target/x86_64-unknown-linux-musl/release/${BIN} /bin/${BIN}
-COPY --from=build /volume/${PROJECT}/mercator_service/static /bin/static
+COPY mercator/target/x86_64-unknown-linux-musl/release/mercator_service /
+COPY mercator/mercator_service/static ./static
 
 ARG BUILD_DATE
 ARG VCS_REF
@@ -42,4 +43,4 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
     org.label-schema.docker.dockerfile="Dockerfile" \
     org.label-schema.schema-version="1.0"
 
-CMD "/bin/${BIN}"
+CMD ["/mercator_service"]

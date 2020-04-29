@@ -25,7 +25,9 @@
 : ${SPATIAL_SEARCH_HOME:="${PWD}"}
 . ${SPATIAL_SEARCH_HOME}/settings.sh
 
-docker build -t kg-spatial-search \
+docker run -v $PWD/mercator:/volume --rm -t clux/muslrust cargo build --release
+
+docker build -t mercator \
        --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
        --build-arg VCS_REF=`git -C mercator rev-parse --short HEAD` \
        --build-arg VERSION=`git -C mercator tag --points-at HEAD` \
